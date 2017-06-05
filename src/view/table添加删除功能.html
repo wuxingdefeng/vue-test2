@@ -27,11 +27,16 @@
                         this.userAge='';
                     },
                     deleteUser:function(n){
-                        if(n == -2){
+                       if(n == -2){
                             this.tableData=[];
                         }else{
                             this.tableData.splice(n,1);
                         }
+                    },
+                    updateUser:function(n){
+                        //修改其中一条数据
+                        var insertPos ={'name':this.name,'userAge':this.userAge};
+                        this.tableData.splice(n,1,insertPos);
                     }
                 }
             })
