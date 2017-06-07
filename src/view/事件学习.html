@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>table添加删除功能</title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="js/bootstrap.css">
+
+
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript">
+        window.onload=function (){
+            //过滤器
+            Vue.filter('uppercase', function(value) {
+                if (!value) { return ''}
+                value = value.toString()
+                //value.charAt(0).toUpperCase() + value.slice(1)
+                //alert(value.slice(1));
+                return value.toUpperCase()
+            })
+            var app = new Vue({
+                el:"#app",
+                data:{
+                    message:"你好",
+                    name:'张三',
+                    datas:''
+                },
+                methods:{
+                    cancelRight1:function (ev){
+                        ev.preventDefault();
+                        alert("cancelRight1");
+                    },
+                    cancelRight2:function (){
+                        alert("cancelRight2");
+                    },
+                    keyDownMethod1:function (ev){
+                        alert(ev.keyCode);
+                    },
+                    keyUpMethod1:function(ev){
+                        alert(ev.keyCode);
+                    },
+                    keyEnterMethod: function () {
+                        alert("你按了enter");
+                    }
+                }
+            })
+
+        }
+    </script>
+</head>
+<body style="padding: 20px;">
+<div id="app">
+    <div class="container">
+        <form class="bs-example bs-example-form" role="form">
+        <div >
+            <button class="btn btn-danger btn-sm" name="button"  data-dismiAss="modal" @click.stop="deleteUser()">确认</button>
+            <h3>鼠标右键</h3>
+            <button class="btn btn-danger btn-sm" name="button"  data-dismiss="modal" @contextmenu="cancelRight1($event)">取消鼠标右键原生</button>
+            <button class="btn btn-danger btn-sm" name="button"  data-dismiss="modal" @contextmenu.prevent="cancelRight2()">取消鼠标右键vue</button>
+            <h3>keydown使用</h3>
+            <input type="text" class="form-control" placeholder="请输入姓名" v-model="name" @keydown="keyDownMethod1($event)">
+            <h3>keyup使用</h3>
+            <input type="text" class="form-control" placeholder="请输入姓名" v-model="name" @keydown="keyUpMethod1($event)">
+            <h3>enter使用</h3>
+            <input type="text" class="form-control" placeholder="请输入姓名" v-model="name" @keydown.13="keyEnterMethod()">
+            <h3>模板</h3>
+            此处数据只绑定一次 <div v-once>{{name}}</div>
+            此处html转换 <p v-html="name">  </p>
+            <h2>过滤器</h2>
+            {{'web'| uppercase}}
+
+        </div>
+        </form>
+    </div>
+
+
+</div>
+
+</body>
+
+
+
+
+</html>

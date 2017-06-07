@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>交互数据22</title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="js/bootstrap.css">
+
+
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="vue-resource.js"></script>
+    <script type="text/javascript">
+         window.onload=function(){
+                   new Vue({
+                       el:'#app',
+                       data:{
+
+                       },
+                       methods:{
+                           get:function(){
+                               this.$http.jsonp('https://sug.so.360.cn/suggest',{
+                                   word:'a'
+                               }).then(function(res){
+                                   alert(res.data.s);
+                               },function(res){
+                                   alert(res.status);
+                               });
+                               /*this.$http.jsonp('http://101.68.79.26:84/jiuzhekan_http/jkGetDoctor/doctorPage',{
+                                   params:{currentPage:1,
+                                   pageSize:0}
+                                   , jsonp:'_callback'
+                               }).then(function(res){
+                                   alert(1);
+                               },function (res){
+                                   alert("kkkk:"+res.status);
+                               });*/
+                               /*this.$http.post('http://101.68.79.26:84/jiuzhekan_http/jkGetDoctor/doctorPage',{
+                                   currentPage:1,
+                                   pageSize:0
+                               },{
+                                   jsonp:'cb'
+                               }).then(function(res){
+                                   alert(1);
+                               },function (res){
+                                   alert("kkkk:"+res.status);
+                               });*/
+                           }
+                       }
+                   });
+               };
+    </script>
+</head>
+<body style="padding: 20px;">
+<div id="app">
+    <input type="button" value="按钮" @click="get()">
+</div>
+
+</body>
+
+
+
+
+</html>
