@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定义指令</title>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap.css">
+
+
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="../vue-resource.js"></script>
+    <script type="text/javascript">
+        Vue.directive('focus',{
+            inserted: function (el) {
+                el.focus();
+            }
+        });
+
+        Vue.directive('drag',{
+                inserted:function (el){
+                    var oDiv = el;
+                    oDiv.onmousedown=function(ev){
+                        var yl = ev.clientX - oDiv.offsetLeft;
+                        var yx = ev.clientY - oDiv.offsetTop;
+                       // console.log("X:"+ev.clientX+",ol:"+oDiv.offsetLeft+";T:"+ev.clientY+",ot"+oDiv.offsetTop);
+
+                        document.onmousemove= function(ev){
+                            var l = ev.clientX -yl;
+                            var x = ev.clientY - yx;
+                          //  console.log(ev.clientX+",MY:"+ev.clientY);
+                            oDiv.style.left = l+"px";
+                            oDiv.style.top =x+"px";
+                        }
+                        document.onmouseup=function(ev){
+                            document.onmousemove =null;
+                            document.onmouseup =null;
+                        }
+                    }
+                }
+        });
+        Vue.filter('data',function(input){
+            var y = input.getFullYear();
+            var m = input.getMonth().toString().length==2?input.getMonth():'0'+input.getMonth();
+            var d = input.getDay().toString().length==2?input.getDay():'0'+input.getDay();
+            var h = input.getHours().toString().length==2?input.getHours():'0'+input.getHours();
+            var mi = input.getMinutes().toString().length==2?input.getMinutes():'0'+input.getMinutes();
+            var s = input.getSeconds().toString().length==2?input.getSeconds():'0'+input.getSeconds();
+            return y+"-"+m+"-"+d+" "+h+":"+mi+":"+s;
+        });
+
+        function valueToPoint (value, index, total) {
+            var x     = 0
+            var y     = -value * 0.9
+            var angle = Math.PI * 2 / total * index
+            var cos   = Math.cos(angle)
+            var sin   = Math.sin(angle)
+            var tx    = x * cos - y * sin + 100
+            var ty    = x * sin + y * cos + 100
+            return { x: tx, y: ty }
+        }
+
+        function generatePoints (stats) {
+            var total = stats.length
+            return stats.map(function (stat, index) {
+                var point = valueToPoint(stat, index, total)
+                return point.x + ',' + point.y
+            }).join(' ')
+        }
+        window.onload=function (){
+
+            //过滤器
+            Vue.filter('uppercase', function(value) {
+                if (!value) { return ''}
+                value = value.toString()
+                //value.charAt(0).toUpperCase() + value.slice(1)
+                return value.toUpperCase()
+            })
+            var app = new Vue({
+                data:{
+                    message:"你好",
+                    timeData:new Date()
+
+                },
+                methods:{
+                },
+                watch:{
+                    message:function(v,oldv){
+                        if(v!=oldv){
+                            alert("数据修改了"+oldv+":"+v);
+                        }
+                    }
+                }
+            }).$mount("#app");
+
+            new Vue({
+                el: '#demo',
+                data: {
+                    show: true
+                }
+            })
+
+            console.log(app.$solt)
+        }
+    </script>
+    <style>
+        [v-clock]{
+            display: none;
+        }
+        .drag{
+            width:100px;
+            height:100px;
+            background-color: red;
+            position:absolute;
+            right:0;
+            top:0px;
+        }
+         .ttt{
+            left:0;
+            top:0;
+        }
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+            opacity: 0
+        }
+        svg { display: block; }
+        polygon { fill: #41B883; }
+        circle {
+            fill: transparent;
+            stroke: #35495E;
+        }
+        input[type="range"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+    </style>
+</head>
+<body style="padding: 20px;">
+<div id="app">
+    <div class="container"  v-cloak>
+        <div>{{message}}</div><br>
+        <input type="text" v-focus v-model="message">
+        <div class="drag" v-drag></div>
+        <div class="drag ttt" v-drag></div>
+
+        <h2>下面测试自定义过滤器修改时间long类型为yyyy-mm-dd  HH:mm:ss</h2>
+            {{timeData | data}}
+    </div>
+</div>
+
+<div id="demo">
+    <button @click="show = !show">
+        Toggle
+    </button>
+    <transition name="fade">
+        <p v-if="show">hello</p>
+    </transition>
+</div>
+
+</div>
+</body>
+
+
+<style>
+    .gray{
+        background: #ccc;
+    }
+</style>
+
+</html>
