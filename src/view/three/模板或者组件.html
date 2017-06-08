@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定义指令</title>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap.css">
+
+
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="../vue-resource.js"></script>
+    <script type="text/javascript">
+        var myMomponent ={
+            template:'<h3>大侠你好</h3>'
+        };
+
+       /* Vue.component('child', {
+            // camelCase in JavaScript
+            props: ['myMessage'],
+            template: '<li> {{ myMessage.text }} </li>'
+        })*/
+
+        Vue.component('todo-item',{
+            props:['todo'],
+            template:"<li>{{ todo.text }}</li>"
+        })
+        Vue.component('todo-kkkk',{
+            props:['todoresult'],
+            template:"<li>{{ todoresult.text }}</li>"
+        });
+        window.onload=function (){
+            var app = new Vue({
+                data:{
+                    message:"你好",
+                    myData:[
+                        {text:122},
+                        {text:222},
+                        {text:333},
+                        {text:444},
+                        {text:544}
+                    ],
+                    groceryList:[
+                        { text: '蔬菜' },
+                        { text: '奶酪' },
+                        { text: '随便其他什么人吃的东西' }
+                    ]
+
+                },
+                methods:{
+                },
+                watch:{
+                    message:function(v,oldv){
+                        if(v!=oldv){
+                            alert("数据修改了"+oldv+":"+v);
+                        }
+                    }
+                },
+                components:{
+                    "my-component":myMomponent
+
+
+                 }
+            }).$mount("#app");
+
+
+        }
+    </script>
+    <style>
+        [v-clock]{
+            display: none;
+        }
+        .drag{
+            width:100px;
+            height:100px;
+            background-color: red;
+            position:absolute;
+            right:0;
+            top:0px;
+        }
+
+
+    </style>
+</head>
+<body style="padding: 20px;">
+<div id="app">
+    <div class="container"  v-cloak>
+      <my-component></my-component>
+        <h3>下面是列表</h3>
+        <ol>
+            <todo-kkkk v-for="item in groceryList" v-bind:todoresult="item"></todo-kkkk>
+            <todo-item v-for="item in myData" v-bind:todo="item"></todo-item>
+        </ol>
+    </div>
+</div>
+
+
+
+</div>
+</body>
+
+
+<style>
+    .gray{
+        background: #ccc;
+    }
+</style>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由html</title>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../js/bootstrap.css">
+
+
+    <script type="text/javascript" src="../../lib/vue1.0.28/vue.js"></script>
+    <script type="text/javascript" src="../vue-resource.js"></script>
+    <script type="text/javascript" src="../vue-router.js"></script>
+
+    <style>
+        [v-clock]{
+            display: none;
+        }
+        .v-link-active{
+            font-size: 20px;
+            color: #f60;
+        }
+
+
+    </style>
+</head>
+<body style="padding: 20px;">
+<div id="app">
+
+        <ul>
+            <li>
+                <a v-link="{path:'/home'}">主页</a>
+            </li>
+            <li>
+                <a v-link="{path:'/news'}">新闻</a>
+            </li>
+        </ul>
+        <div>
+            <router-view></router-view>
+        </div>
+
+    <template id="home">
+     <h3>我是主页</h3>
+        <div>
+                <a v-link="{path:'/home/login'}">登录</a>
+                <a v-link="{path:'/home/reg'}">注册</a>
+        </div>
+        <div>
+            <router-view></router-view>
+        </div>
+    </template>
+    <template id="news">
+        <h3>我是新闻</h3>
+        <div>
+            <a v-link="{path:'/news/detail/001'}">新闻001</a>
+            <a v-link="{path:'/news/detail/002'}">新闻002</a>
+        </div>
+        <div>
+            <router-view></router-view>
+        </div>
+    </template>
+</div>
+
+<template id="detail">
+    <div>{{$route.params|json}}</div>
+    <div>{{$route.path }}</div>
+    <div>{{$route.query | json}}</div>
+    {{$route.params | json}}
+    <br>
+    {{$route.path}}
+    <br>
+    {{$route.query | json}}
+</template>
+
+
+<script type="text/javascript">
+    var App = Vue.extend();
+    var Home = Vue.extend({
+        template:'#home'
+    });
+
+    var News = Vue.extend({
+        template:"#news"
+    });
+    var Detail =Vue.extend({
+        template:"#detail"
+    });
+    var router = new VueRouter();
+    router.map({
+        'home':{
+            component:Home,
+            subRoutes:{
+                'login':{
+                    component:{
+                        template: '<strong>我是登录{{$route.params |json}}</strong>'
+                    }
+                },
+                'reg':{
+                    component:{
+                        template:'<strong>我是注册{{$route.params |json}}</strong>'
+                    }
+                }
+            },
+
+        },
+        'news':{
+            component:News,
+            subRoutes:{
+                '/detail/:id':{
+                    component:Detail
+                }
+            }
+        }
+    });
+//    router.map({
+//        'home':{
+//            component:Home,
+//            subRoutes:{
+//                'login':{
+//                    component:{
+//                        template:'<strong>我是登录信息</strong>'
+//                    }
+//                },
+//                'reg':{
+//                    component:{
+//                        template:'<strong>我是注册信息</strong>'
+//                    }
+//                }
+//            }
+//        },
+//        'news':{
+//            component:News
+//        }
+//    });
+
+    router.start(App,'#app');
+    router.redirect({
+        '/':'/home'
+    });
+</script>
+</body>
+</html>
